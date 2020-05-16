@@ -33,7 +33,7 @@ def get_filters():
         if month in ["january", "february", "march", "april", "may", "june", "all"]:
             break
         else:
-            print('Invalid input, try again!')
+            print('try again!')
 
 
     # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
@@ -42,7 +42,7 @@ def get_filters():
         if day in ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday", "all"]:
             break
         else:
-            print('Invalid input, try again!')
+            print('try again!')
 
 
 
@@ -63,19 +63,19 @@ def load_data(city, month, day):
     """
     file_name = CITY_DATA[city]
     df = pd.read_csv(file_name)
-    
+
     df['Start Time'] = pd.to_datetime(arg = df['Start Time'], format = '%Y-%m-%d %H:%M:%S')
-    
+
     if month != 'all':
         df['month'] = df['Start Time'].dt.month
         months = ['january', 'february', 'march', 'april', 'may', 'june']
         month = months.index(month) + 1
-        
+
         df = df.loc[df['month'] == month]
-        
+
     if day != 'all':
         df['day_of_week'] = df['Start Time'].dt.weekday_name
-        
+
         df = df.loc[df['day_of_week'] == day.title()]
     return df
 
@@ -85,13 +85,13 @@ def time_stats(df):
 
     print('\nCalculating The Most Frequent Times of Travel...\n')
     start_time = time.time()
-    
+
     df['Start Time'] = pd.to_datetime(arg = df['Start Time'], format = '%Y-%m-%d %H:%M:%S')
-    
+
     month = df['Start Time'].dt.month
     weekday_name = df['Start Time'].dt.weekday_name
     hour = df['Start Time'].dt.hour
-    
+
     # TO DO: display the most common month
     most_common_month = month.mode()[0]
     print('The most common month: ', most_common_month)
@@ -119,12 +119,12 @@ def station_stats(df):
 
     # TO DO: display most commonly used start station
     most_common_start_station = st.mode(df['Start Station'])
-    print('\nThe most common start station is {}\n'.format(most_common_start_station))
+    print('\nMost popular start station is {}\n'.format(most_common_start_station))
 
 
     # TO DO: display most commonly used end station
     most_common_end_station = st.mode(df['End Station'])
-    print('\nThe most common end station is {}\n'.format(most_common_end_station))
+    print('\nMost popular end station is {}\n'.format(most_common_end_station))
 
 
     # TO DO: display most frequent combination of start station and end station trip
@@ -184,25 +184,25 @@ def user_stats(df):
         earliest_birthday = df['Birth Year'].min()
         recent_birthday = df['Birth Year'].max()
         most_common_birthday = st.mode(df['Birth Year'])
-        print('\nEarliest year of birth is {}\n'.format(int(earliest_birthday))) 
+        print('\nEarliest year of birth is {}\n'.format(int(earliest_birthday)))
         print('\nRecent year of birth is {}\n'.format(int(recent_birthday)))
         print('\nMost common year of birth is {}\n'.format(int(most_common_birthday)))
-    
+
 
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
-    
+
 def display_data(df):
 
     row_length = df.shape[0]
 
     for i in range(0, row_length, 5):
-        
+
         yes = input('\nDo you want to see the raw data of user trip? Type Yes or No\n ')
         if yes.lower() != 'yes':
             break
-            
+
         row_data = df.iloc[i: i + 5].to_json(orient='records', lines=True).split('\n')
         for row in row_data:
             parsed_row = json.loads(row)
